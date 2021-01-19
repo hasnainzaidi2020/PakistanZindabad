@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drink Water App</title>
+
+    <style>
+
+
+        @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --border-color: #144fc6;
+  --fill-color: #6ab3f8;
+}
+
+body{
+    font-family: 'Roboto', sans-serif;
+    background-color:  #3494e4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin-bottom: 40px;
+}
+h1{
+    margin: 10px 0 0; 
+    color: white;
+}
+h2{
+    font-weight: 400;
+    color: white;
+    margin: 10px  0;
+}
+.cup {
+  background-color: #fff;
+  border: 4px solid var(--border-color);
+  color: var(--border-color);
+  border-radius:  0 0 40px 40px;
+  width: 130px;
+  height: 250px;
+  margin: 30px 0 0 ;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cup.cup-small{
+    background-color: #fff;
+  border: 4px solid var(--border-color);
+  color: var(--border-color);
+  border-radius:  0 0 15px 15px;
+  width: 60px;
+  height: 105px;
+  margin: 30px 0 0 ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 15px;
+  margin: 5px;
+}
+.cup.cup-small.full {
+  background-color: var(--fill-color);
+  color: #fff;
+}
+.cups{
+    display: flex;
+    flex-wrap: wrap;
+    width: 280px;
+    justify-content: center;
+    align-items: center;
+}
+
+.remained {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  transition: 0.3s ease;
+}
+
+.remained span {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.remained small {
+  font-size: 12px;
+}
+
+.percentage {
+  background-color: var(--fill-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 30px;
+  height: 0;
+  transition: 0.3s ease;
+}
+
+.text {
+  text-align: center;
+  margin: 10px 5px;
+  color: #fff;
+}
+    </style>
+
+</head>
+<body>
+    <h1>Drink Water</h1>
+    <h2>Goal 2 Liter</h2>
+
+
+    <div class="cup">
+        <div class="remained" id="remained">
+          <span id="liters"></span>
+          <small>Remained</small>
+        </div>
+  
+        <div class="percentage" id="percentage"></div>
+      </div>
+
+<p class="text">Select How Many Class Of Water That You Have Drink</p>
+
+<div class="cups">
+<div class="cup cup-small ">250 ml</div>
+<div class="cup cup-small">250 ml</div>
+<div class="cup cup-small">250 ml</div>
+<div class="cup cup-small">250 ml</div>
+<div class="cup cup-small">250 ml</div>
+<div class="cup cup-small">250 ml</div>
+<div class="cup cup-small">250 ml</div>
+<div class="cup cup-small">250 ml</div>
+</div>
+</body>
+<script>
+const smallcup = document.querySelectorAll('.cup-small')
+const liters = document.getElementById('liters')
+const percentage = document.getElementById('percentage')
+const remained =  document.getElementById('remained')
+
+smallcup.forEach((cup,idx)=>{
+
+cup.addEventListener('click',()=> highlightCups(idx))
+})
+
+function highlightCups(idx)
+{
+    if(idx === 7 && smallcup[idx].classList.contains('full')) idx--;
+   if(smallcup[idx].classList.contains('full') && !smallcup[idx].nextElementSibling.classList.contains('full'))
+   {
+       idx-- ;
+   }
+
+   smallcup.forEach((cup,idx2)=>{
+   if(idx2<=idx)
+   {
+       cup.classList.add('full')
+   }
+   else{
+       cup.classList.remove('full')
+   }
+   })
+
+   updateBigCup()
+}
+
+function updateBigCup(){
+    const fullCups = document.querySelectorAll('.cup-small.full').length;
+    const totalcup = smallcup.length;
+
+    if(fullCups === 0) 
+    {
+        percentage.style.visibility = 'hidden';
+        percentage.style.height= 0;
+    }
+    else{
+        percentage.style.visibility = 'visible';
+        percentage.style.height = `${fullCups /totalcup * 330}px`
+        percentage.innerText =`${fullCups/totalcup * 100}%`
+    }
+
+if(fullCups === totalcup)
+{
+remained.style.visibility = 'hidden'
+remained.style.height=0;
+}
+else
+{
+    remained.style.visibility = 'visible'
+    liters.innerText = `${2-(250 * fullCups/1000)}L`
+}
+}
+</script>
+</html>
